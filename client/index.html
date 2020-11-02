@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<title>Parcial 2</title>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+
+      function construir_cartas(){
+
+        var carta = document.getElementById("cuerpo");
+                while (carta.firstChild) {
+                    carta.removeChild(carta.firstChild);
+                }
+        carta.removeAttribute("class");
+        axios.get(`http://localhost:3003/getcartas/1`)
+                        .then(function(response) {
+                            if (response.data != "No hay cartas") {
+                              let arregloPokemones = response.data;
+                              var N = arregloPokemones.length
+                              for(var i = 0; i<N;i++){
+                                var h5element = document.createElement("h5");
+                                var textNombre = document.createTextNode(arregloPokemones[i].pokemonName);
+                                h5element.setAttribute("class", "card-title");
+                                h5element.appendChild(textNombre);
+                                var PelementAtributo = document.createElement("p");
+                                var TextAtributos = document.createTextNode("Weight: " + arregloPokemones[i].weight + "Height:" + arregloPokemones[i].height);
+                                PelementAtributo.setAttribute("class", "card-text");
+                                PelementAtributo.appendChild(TextAtributos);
+                                var dcardbody = document.createElement("div");
+                                dcardbody.setAttribute("class", "card-body");
+                                dcardbody.appendChild(h5element);
+                                dcardbody.appendChild(PelementAtributo);
+                                var imagen = document.createElement("img");
+                                imagen.setAttribute("class", "card-img-top");
+                                imagen.setAttribute("src", arregloPokemones[i].image);
+                                var divcard = document.createElement("div");
+                                divcard.setAttribute("class", "card");
+                                divcard.setAttribute("style", "width: 18rem;");
+                                divcard.appendChild(imagen);
+                                divcard.appendChild(dcardbody);
+                                cuerpo.appendChild(divcard);
+                              }
+                            }
+                        })
+                        .catch(function(response) {
+                        });
+      }
+
+        document.addEventListener("DOMContentLoaded", (_) => {
+            let addItem = () => {
+              var carta = document.getElementById("cuerpo");
+                while (carta.firstChild) {
+                    carta.removeChild(carta.firstChild);
+                }
+              carta.removeAttribute("class");
+              axios.get(`http://localhost:3003/pedircartas/1`)
+                        .then(function(response) {
+                              let arregloPokemones = response.data;
+                              var N = arregloPokemones.length
+                              var N = arregloPokemones.length
+                              for(var i = 0; i<N;i++){
+                                var h5element = document.createElement("h5");
+                                var textNombre = document.createTextNode(arregloPokemones[i].pokemonName);
+                                h5element.setAttribute("class", "card-title");
+                                h5element.appendChild(textNombre);
+                                var PelementAtributo = document.createElement("p");
+                                var TextAtributos = document.createTextNode("Weight: " + arregloPokemones[i].weight + "Height:" + arregloPokemones[i].height);
+                                PelementAtributo.setAttribute("class", "card-text");
+                                PelementAtributo.appendChild(TextAtributos);
+                                var dcardbody = document.createElement("div");
+                                dcardbody.setAttribute("class", "card-body");
+                                dcardbody.appendChild(h5element);
+                                dcardbody.appendChild(PelementAtributo);
+                                var imagen = document.createElement("img");
+                                imagen.setAttribute("class", "card-img-top");
+                                imagen.setAttribute("src", arregloPokemones[i].image);
+                                var divcard = document.createElement("div");
+                                divcard.setAttribute("class", "card");
+                                divcard.setAttribute("style", "width: 18rem;");
+                                divcard.appendChild(imagen);
+                                divcard.appendChild(dcardbody);
+                                cuerpo.appendChild(divcard);
+                              }
+                        })
+                        .catch(function(response) {
+                        });
+      }
+      document.getElementById("add-item").addEventListener("click", addItem);
+        });
+        window.setInterval(function(){
+          construir_cartas()
+        }, 5000);
+    </script>
+    <style type="text/css">
+      #cuerpo{
+      display: flex;
+      flex-wrap: wrap;
+      }
+    </style>
+</head>
+<body>
+  <center><button id="add-item"> Pedir Cartas </button></center>
+  <hr>
+  <br>
+<div id="cuerpo">
+ </div>
+</body>
+</html>
